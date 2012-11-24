@@ -1,0 +1,48 @@
+README
+
+ActiveRecordEx
+--------------
+This is an enhanced Active Record for Code Igniter allowing grouping of where statements. 
+
+For example consider this query:
+SELECT * FROM `user` WHERE `user`.`status`=1 AND (`user`.`id_department` = 1 OR `user`.`id_department` = 2)
+
+Using ActiveRecordEx you can do the following:
+$this->db->select("users.*")->from('users')->where('user.status',1)->group_start()->where('user.id_department',1)->or_where('user.id_department',2)->group_end();
+
+ActiveRecordEx adds the following statements to the db driver:
+
+$this->db->group_start()	: Opens a parenthesis 
+$this->db->group_end()		: Closes a parenthesis
+$this->db->and_()			: Joins two clauses using an AND statement		
+$this->db->or_()			: Joins two clauses using an OR statement		
+
+Some examples:
+--------------
+Using and_()
+------------
+$this->db->from('appointment')->where('user_id',1)->and_()->group_start()->where('status',1)->or_where('status',2)->group_end()->get();
+SELECT * FROM `appointment` WHERE `user_id` = 1 AND (`status`=1 OR `status`=2)
+
+Using or_()
+-----------
+$this->db->from('appointment')->where('user_id',1)->and_()->group_start()->where('status',1)->or_where('status',2)->group_end()->get();
+
+
+I have successfully tested for the following cases:
+or_where() 
+where_in()
+or_where_in()
+where_not_in()
+or_where_not_in()
+like()
+or_like()
+not_like()
+or_not_like()
+
+
+Installation:
+-------------
+
+Code Igniter does not allow you to extend the active record class using a prefix, yet we can achieve it fairly simply as explained in:
+http://www.webrevised.com/extending-code-igniter-active-record-class/
